@@ -1,0 +1,9 @@
+Danh sách chi tiêu:
+- chuối : 10000 VND
+- táo: 5000 VND
+- xoài: 15000 VND
+- lê: 13000 VND
+- kẹo: 7000 VND
+
+Tổng số tiền: 50000 VND
+Món hàng có giá trị cao nhất: kẹo (7000 VND)
