@@ -9,7 +9,10 @@ def is_prime(n):
             return False
     return True
 
-def get_hint(secret):
+def get_hint(secret, used_hints=None):
+    if used_hints is None:
+        used_hints = []
+    
     hints = []
     hints.append(f"Số cần tìm là số {'chẵn' if secret % 2 == 0 else 'lẻ'}.")
     if secret <= 33:
@@ -25,7 +28,15 @@ def get_hint(secret):
     if secret % 3 == 0:
         hints.append("Số cần tìm chia hết cho 3.")
     
-    return random.choice(hints)
+    available_hints = [h for h in hints if h not in used_hints]
+    
+    if not available_hints:
+        available_hints = hints
+    
+    selected_hint = random.choice(available_hints)
+    used_hints.append(selected_hint)
+    
+    return selected_hint, used_hints
 
 def load_high_score():
     if os.path.exists("high_score.txt"):
@@ -48,12 +59,13 @@ def play_game():
     print("Máy tính đã chọn một số từ 1 đến 100.")
     print("Bạn có TỐI ĐA 7 LẦN ĐOÁN.")
     if high_score:
-        print(f" Kỷ lục của bạn: {high_score} lần đoán.")
+        print(f"Kỷ lục của bạn: {high_score} lần đoán.")
     else:
         print("Chưa ghi nhận kỷ lục nào. Hãy chơi thử lần đầu!")
     
     secret = random.randint(1, 100)
-    hint = get_hint(secret)
+    used_hints = []
+    hint, used_hints = get_hint(secret, used_hints)
     print(f"\n Gợi ý 1: {hint}")
     
     attempts = 0
@@ -86,9 +98,9 @@ def play_game():
         else:
             print("Số cần tìm NHỎ HƠN số bạn vừa đoán.")
         
-        if attempts >=5 and attempts < max_attempts and guess != secret:
-            extra_hint = get_hint(secret)
-            print(f" GGợi ý thêm: {extra_hint}")
+        if attempts >= 5 and attempts < max_attempts and guess != secret:
+            extra_hint, used_hints = get_hint(secret, used_hints)
+            print(f"Gợi ý thêm: {extra_hint}")
     
     print(f"\n Bạn đã hết lượt! Số bí mật là {secret}. Chúc bạn may mắn lần sau!")
 
